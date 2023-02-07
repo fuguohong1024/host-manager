@@ -61,8 +61,8 @@ func (m *MachineScript) RunMachineScript(rc *ctx.ReqCtx) {
 
 	script := ms.Script
 	// 如果有脚本参数，则用脚本参数替换脚本中的模板占位符参数
-	if params := g.Query("params"); params != "" {
-		script = utils.TemplateParse(ms.Script, utils.Json2Map(params))
+	if params := g.QueryMap("params"); len(params) != 0 {
+		script = utils.TemplateParse(ms.Script, params)
 	}
 	cli := m.MachineApp.GetCli(machineId)
 	biz.ErrIsNilAppendErr(m.TagApp.CanAccess(rc.LoginAccount.Id, cli.GetMachine().TagPath), "%s")
